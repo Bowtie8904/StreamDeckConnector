@@ -158,7 +158,7 @@ class StreamDeckInterface extends WebSocketClient implements DataProcessor
         }
         else if (eventName.equalsIgnoreCase("keyUp"))
         {
-            event = new KeyDownEvent();
+            event = new KeyUpEvent();
             ((StreamDeckActionEvent)event).setActionName(action.toLowerCase());
             ((StreamDeckActionEvent)event).setContext(context);
         }
