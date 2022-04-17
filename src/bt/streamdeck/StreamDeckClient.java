@@ -90,6 +90,8 @@ public class StreamDeckClient extends ObjectClient implements DataProcessor
     @Override
     public Object process(Data data)
     {
+        Log.entry(data.get());
+
         Object rawData = data.get();
 
         if (rawData instanceof WillAppearEvent event)
@@ -122,6 +124,8 @@ public class StreamDeckClient extends ObjectClient implements DataProcessor
         {
             Log.debug(rawData.toString());
         }
+
+        Log.exit();
 
         return null;
     }
