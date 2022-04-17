@@ -2,13 +2,17 @@ package bt.streamdeck;
 
 import bt.console.input.ArgumentParser;
 import bt.console.input.ValueArgument;
+import bt.gui.swing.tray.DefaultSwingSystemTrayFrame;
 import bt.io.json.JSON;
 import bt.log.ConsoleLoggerHandler;
 import bt.log.FileLoggerHandler;
 import bt.log.Log;
 import bt.streamdeck.exc.StreamDeckArgumentMissingException;
+import bt.utils.Exceptions;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -80,6 +84,11 @@ public class Main
         try
         {
             parser.parse(args);
+
+            var sysTrayOption = new DefaultSwingSystemTrayFrame(Exceptions.uncheckGet(() -> ImageIO.read(new File("icon.png"))));
+            sysTrayOption.getSystemTraySettings().addLabel("StreamDeckInterface on port " + config.getServerPort());
+            sysTrayOption.getSystemTraySettings().addOption("Close", e -> System.exit(0));
+            sysTrayOption.sendToSystemTray();
 
             new StreamDeckInterface(config.getStreamDeckPort(),
                                     config.getUuid(),

@@ -46,6 +46,7 @@ class StreamDeckInterface extends WebSocketClient implements DataProcessor
         this.server.getEventDispatcher().subscribeTo(ServerClientKilled.class, this::onClientKilled);
         this.server.setName("StreamDeckInterface " + uuid);
         this.server.start();
+        connect();
     }
 
     protected void onClientKilled(ServerClientKilled e)
@@ -97,6 +98,7 @@ class StreamDeckInterface extends WebSocketClient implements DataProcessor
     @Override
     public Object process(Data data)
     {
+        Log.entry(data.get());
         Object rawData = data.get();
 
         if (rawData instanceof String)
@@ -104,11 +106,14 @@ class StreamDeckInterface extends WebSocketClient implements DataProcessor
             send((String)rawData);
         }
 
+        Log.exit();
+
         return null;
     }
 
     public synchronized void onMessage(String message)
     {
+        Log.entry(message);
         JSONObject json = JSON.parse(message);
 
         String action = "";
@@ -173,6 +178,8 @@ class StreamDeckInterface extends WebSocketClient implements DataProcessor
                 throw new StreamDeckSendException("Failed to send event to client " + client.getHost() + ":" + client.getPort(), e);
             }
         }
+
+        Log.exit();
     }
 
     public void onOpen(ServerHandshake serverHandshake)

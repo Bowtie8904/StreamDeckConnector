@@ -63,6 +63,11 @@
             <version>a6643a06fa</version>
         </dependency>
         <dependency>
+            <groupId>com.github.Bowtie8904</groupId>
+            <artifactId>BtUserInterface</artifactId>
+            <version>6a87e4635d</version>
+        </dependency>
+        <dependency>
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
             <version>1.5.2</version>
