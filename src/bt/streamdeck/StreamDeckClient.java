@@ -2,11 +2,13 @@ package bt.streamdeck;
 
 import bt.async.Data;
 import bt.io.json.JSON;
+import bt.io.json.JSONBuilder;
 import bt.log.Log;
 import bt.remote.socket.ObjectClient;
 import bt.remote.socket.data.DataProcessor;
 import bt.streamdeck.event.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +28,58 @@ public class StreamDeckClient extends ObjectClient implements DataProcessor
         setDataProcessor(this);
         setSingleThreadProcessing(true);
         autoReconnect(-1);
+    }
+
+    public void setTitle(String actionName, String title)
+    {
+        String context = this.actions.get(actionName.toLowerCase());
+
+        if (context != null)
+        {
+            var json = new JSONBuilder().put("event", "setTitle")
+                                        .put("context", context)
+                                        .put("payload", new JSONBuilder().put("title", title)
+                                                                         .put("target", "both")
+                                                                         .put("state", 0).toJSON()).toString();
+
+            Log.debug("Sending title update: {}", json);
+
+            try
+            {
+                send(json);
+            }
+            catch (IOException e)
+            {
+                Log.error("Failed to send", e);
+            }
+        }
+    }
+
+    public void setState(String actionName, int state)
+    {
+        Log.entry(actionName, state);
+
+        String context = this.actions.get(actionName.toLowerCase());
+
+        if (context != null)
+        {
+            var json = new JSONBuilder().put("event", "setState")
+                                        .put("context", context)
+                                        .put("payload", new JSONBuilder().put("state", state).toJSON()).toString();
+
+            Log.debug("Sending state update: {}", json);
+
+            try
+            {
+                send(json);
+            }
+            catch (IOException e)
+            {
+                Log.error("Failed to send", e);
+            }
+        }
+
+        Log.exit();
     }
 
     public void setListener(StreamDeckActionListener listener)
