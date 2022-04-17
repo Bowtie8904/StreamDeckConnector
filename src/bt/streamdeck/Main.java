@@ -43,7 +43,7 @@ public class Main
             config.setServerPort(Integer.parseInt(port));
         });
         serverPortCmd.onMissing(() -> {
-            throw new StreamDeckArgumentMissingException("port missing.");
+            throw new StreamDeckArgumentMissingException("serverPort missing.");
         });
         parser.register(serverPortCmd);
 
